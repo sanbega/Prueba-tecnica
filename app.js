@@ -1,73 +1,26 @@
-const axios = require('axios').default
 const express = require('express')
-const app = express()
+const PeopleService = require('./src/services/PeopleServices')
+const PlanetService = require('./src/services/PlanetServices')
+const StarshipService = require('./src/services/StarshipsService')
+const SpecieService = require('./src/services/SpecieService')
+const FilmService = require('./src/services/FilmService')
 
-const baseURL = 'https://swapi.dev/api/'
+const app = express()
+const specieService = new SpecieService()
+const planetService = new PlanetService()
+const peopleService = new PeopleService(planetService, specieService) // instanciar un oobjeto
+const starshipService = new StarshipService()
+const filmService = new FilmService(
+  planetService,
+  peopleService,
+  starshipService
+)
 
 app.get('/films', async function (req, res) {
-  const { data } = await axios.get(baseURL + '/films')
-
-  const film = await Promise.all(
-    data.results.map(async (films) => {
-      // Load characters
-      const people = await Promise.all(
-        film.people.map((peopleURL) =>
-          axios.get(peopleURL).then(({ data }) => {
-            return {
-              name: data.name,
-              gender: data.gender,
-              hair_color: data.hair_color,
-              skin_color: data.skin_color,
-              eye_color: data.eye_color,
-              height: data.height,
-              homeworld: data.homeworld,
-              language: data.language,
-              average_height: data.average_height
-            }
-          })
-        )
-      )
-
-      // Load the planets
-      const planets = await Promise.all(
-        film.planets.map((planetURL) =>
-          axios.get(planetURL).then(({ data }) => {
-            return {
-              name: data.name,
-              terrain: data.terrain,
-              gravity: data.gravity,
-              diameter: data.diameter,
-              population: data.population
-            }
-          })
-        )
-      )
-
-      // Load the starships
-      const starships = await Promise.all(
-        film.starships.map((startShipURL) =>
-          axios.get(startShipURL).then(({ data }) => {
-            return {
-              name: data.name,
-              model: data.model,
-              manufacturer: data.manufacturer,
-              passengers: data.passengers
-            }
-          })
-        )
-      )
-
-      return {
-        name: film.title,
-        planets,
-        people,
-        starships
-      }
-    })
-  )
+  const films = await filmService.getAllFilms()
 
   res.json({
-    film
+    films
   })
 })
 
