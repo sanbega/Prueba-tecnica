@@ -7,8 +7,8 @@ const baseURL = 'https://swapi.dev/api/'
 app.get('/films', async function (req, res) {
   const { data } = await axios.get(baseURL + '/films')
 
-  const films = await Promise.all(
-    data.results.map(async (film) => {
+  const film = await Promise.all(
+    data.results.map(async (films) => {
       // Load characters
       const people = await Promise.all(
         film.people.map((peopleURL) =>
@@ -21,7 +21,6 @@ app.get('/films', async function (req, res) {
               eye_color: data.eye_color,
               height: data.height,
               homeworld: data.homeworld,
-              name: data.name,
               language: data.language,
               average_height: data.average_height
             }
@@ -68,7 +67,7 @@ app.get('/films', async function (req, res) {
   )
 
   res.json({
-    films
+    film
   })
 })
 
@@ -76,6 +75,6 @@ app.get('/', function (req, res) {
   res.send('Welcome to the star wars API project')
 })
 
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000')
+app.listen(4000, () => {
+  console.log('Server running on http://localhost:4000')
 })

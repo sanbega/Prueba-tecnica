@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "pro": "node app.js",
     "dev": "nodemon app.js",
     "lint": "standard --fix",
     "prettier": "prettier --write ."
