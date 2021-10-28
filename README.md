@@ -2,7 +2,8 @@
 
 # PRUEBA TECNICA DE SELECCION
 
-Trabaje con node.js en la cual el objetivo era consumir una api de Star Wars y traer cierta informacion de ella, utilice Axios para escuchar esta api y Express para generar mis enpoints y para poder traer lo que necesitaba tambien utilice Prettier y Standard para arreglar mi codigo y instale nodemon para no estar guardando y corriendo el servidor
+Trabaje con Node.js en la cual el objetivo era consumir una api de Star Wars y traer cierta informacion de ella, utilice Axios para escuchar la Api y Express para generar mis enpoints.Para arreglar mi codigo utilice prettier y Standard.
+Tanto el codigo esta dividida en Servicios dentro de la ruta ./src/services
 
 # Comenzando
 
@@ -13,6 +14,8 @@ npm install
 Una ves instaladas corre el proyecto con el siguiente comando
 
 npm run dev
+
+## comandos para ordenar un poco mas el codigo
 
 Comando para utilizar Standard
 
@@ -34,4 +37,4 @@ Nodemon
 
 # Licencia
 
-MIT
+ISC

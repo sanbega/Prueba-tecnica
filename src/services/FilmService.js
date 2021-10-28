@@ -14,23 +14,33 @@ class FilmService {
     return Promise.all(
       data.results.map(async (film) => {
         // Load characters
-        const people = await Promise.all(
-          film.characters.map((peopleURL) =>
-            this.peopleService.getPeopleByURL(peopleURL)
-          )
+        const peoplePromises = film.characters.map((peopleURL) =>
+          this.peopleService.getPeopleByURL(peopleURL)
         )
+
         // Load the planets
-        const planets = await Promise.all(
-          film.planets.map((planetURL) =>
-            this.planetService.getPlanetByURL(planetURL)
-          )
+        const planetsPromises = film.planets.map((planetURL) =>
+          this.planetService.getPlanetByURL(planetURL)
         )
 
         // Load the starships
-        const starships = await Promise.all(
-          film.starships.map((startShipURL) =>
-            this.starshipService.getStarshipByURL(startShipURL)
-          )
+        const starshipsPromises = film.starships.map((startShipURL) =>
+          this.starshipService.getStarshipByURL(startShipURL)
+        )
+
+        const response = await Promise.all([
+          ...planetsPromises,
+          ...starshipsPromises,
+          ...peoplePromises
+        ]) // destructur
+        const planets = response.slice(0, planetsPromises.length)
+        const starships = response.slice(
+          planetsPromises.length,
+          starshipsPromises.length + planetsPromises.length
+        )
+        const people = response.slice(
+          starshipsPromises.length + planetsPromises.length,
+          response.length
         )
 
         return {
